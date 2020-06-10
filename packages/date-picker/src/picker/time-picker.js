@@ -12,28 +12,13 @@ export default {
     arrowControl: Boolean
   },
 
-  data() {
-    return {
-      type: ''
-    };
-  },
+  computed: {
+    type() {
+      return this.isRange ? 'timerange' : 'time';
+    },
 
-  watch: {
-    isRange(isRange) {
-      if (this.picker) {
-        this.unmountPicker();
-        this.type = isRange ? 'timerange' : 'time';
-        this.panel = isRange ? TimeRangePanel : TimePanel;
-        this.mountPicker();
-      } else {
-        this.type = isRange ? 'timerange' : 'time';
-        this.panel = isRange ? TimeRangePanel : TimePanel;
-      }
+    panel() {
+      return this.isRange ? TimeRangePanel : TimePanel;
     }
   },
-
-  created() {
-    this.type = this.isRange ? 'timerange' : 'time';
-    this.panel = this.isRange ? TimeRangePanel : TimePanel;
-  }
 };

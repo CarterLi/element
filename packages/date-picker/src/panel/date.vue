@@ -176,6 +176,27 @@
 
     directives: { Clickoutside },
 
+    props: {
+      defaultValue: {},
+      defaultTime: {},
+      popperClass: String,
+      width: String,
+      showTime: Boolean,
+      selectionMode: {
+        type: String,
+        default: 'day'
+      },
+      arrowControl: Boolean,
+      format: String,
+      clearable: Boolean,
+      value: Array,
+      selectableRange: {
+        type: Array,
+        default: () => []
+      },
+      disabled: Boolean
+    },
+
     watch: {
       showTime(val) {
         /* istanbul ignore if */
@@ -513,13 +534,8 @@
 
     data() {
       return {
-        popperClass: '',
         date: new Date(),
         value: '',
-        defaultValue: null, // use getDefaultValue() for time computation
-        defaultTime: null,
-        showTime: false,
-        selectionMode: 'day',
         shortcuts: '',
         visible: false,
         currentView: 'date',
@@ -529,8 +545,6 @@
         firstDayOfWeek: 7,
         showWeekNumber: false,
         timePickerVisible: false,
-        format: '',
-        arrowControl: false,
         userInputDate: null,
         userInputTime: null
       };

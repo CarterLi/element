@@ -76,6 +76,17 @@
   export default {
     components: { ElScrollbar },
 
+    props: {
+      defaultValue: {},
+      popperClass: String,
+      width: {
+        type: Number,
+        value: 0
+      },
+      value: String,
+      disabled: Boolean
+    },
+
     watch: {
       value(val) {
         if (!val) return;
@@ -138,16 +149,12 @@
 
     data() {
       return {
-        popperClass: '',
         start: '09:00',
         end: '18:00',
         step: '00:30',
-        value: '',
-        defaultValue: '',
         visible: false,
         minTime: '',
-        maxTime: '',
-        width: 0
+        maxTime: ''
       };
     },
 

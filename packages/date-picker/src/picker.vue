@@ -1,86 +1,107 @@
 <template>
-  <el-input
-    class="el-date-editor"
-    :class="'el-date-editor--' + type"
-    :readonly="!editable || readonly || type === 'dates' || type === 'week'"
-    :disabled="pickerDisabled"
-    :size="pickerSize"
-    :name="name"
-    v-bind="firstInputId"
-    v-if="!ranged"
-    v-clickoutside="handleClose"
-    :placeholder="placeholder"
-    @focus="handleFocus"
-    @keydown.native="handleKeydown"
-    :value="displayValue"
-    @input="value => userInput = value"
-    @change="handleChange"
-    @mouseenter.native="handleMouseEnter"
-    @mouseleave.native="showClose = false"
-    :validateEvent="false"
-    ref="reference">
-    <i slot="prefix"
-      class="el-input__icon"
-      :class="triggerClass"
-      @click="handleFocus">
-    </i>
-    <i slot="suffix"
-      class="el-input__icon"
-      @click="handleClickIcon"
-      :class="[showClose ? '' + clearIcon : '']"
-      v-if="haveTrigger">
-    </i>
-  </el-input>
-  <div
-    class="el-date-editor el-range-editor el-input__inner"
-    :class="[
-      'el-date-editor--' + type,
-      pickerSize ? `el-range-editor--${ pickerSize }` : '',
-      pickerDisabled ? 'is-disabled' : '',
-      pickerVisible ? 'is-active' : ''
-    ]"
-    @click="handleRangeClick"
-    @mouseenter="handleMouseEnter"
-    @mouseleave="showClose = false"
-    @keydown="handleKeydown"
-    ref="reference"
-    v-clickoutside="handleClose"
-    v-else>
-    <i :class="['el-input__icon', 'el-range__icon', triggerClass]"></i>
-    <input
-      autocomplete="off"
-      :placeholder="startPlaceholder"
-      :value="displayValue && displayValue[0]"
+  <el-dropdown>
+    <el-input
+      class="el-date-editor"
+      :class="'el-date-editor--' + type"
+      :readonly="!editable || readonly || type === 'dates' || type === 'week'"
       :disabled="pickerDisabled"
+      :size="pickerSize"
+      :name="name"
       v-bind="firstInputId"
-      :readonly="!editable || readonly"
-      :name="name && name[0]"
-      @input="handleStartInput"
-      @change="handleStartChange"
+      v-if="!ranged"
+      v-clickoutside="handleClose"
+      :placeholder="placeholder"
       @focus="handleFocus"
-      class="el-range-input">
-    <slot name="range-separator">
-      <span class="el-range-separator">{{ rangeSeparator }}</span>
-    </slot>
-    <input
-      autocomplete="off"
-      :placeholder="endPlaceholder"
-      :value="displayValue && displayValue[1]"
-      :disabled="pickerDisabled"
-      v-bind="secondInputId"
-      :readonly="!editable || readonly"
-      :name="name && name[1]"
-      @input="handleEndInput"
-      @change="handleEndChange"
-      @focus="handleFocus"
-      class="el-range-input">
-    <i
-      @click="handleClickIcon"
-      v-if="haveTrigger"
-      :class="[showClose ? '' + clearIcon : '']"
-      class="el-input__icon el-range__close-icon">
-    </i>
-  </div>
+      @keydown.native="handleKeydown"
+      :value="displayValue"
+      @input="value => userInput = value"
+      @change="handleChange"
+      @mouseenter.native="handleMouseEnter"
+      @mouseleave.native="showClose = false"
+      :validateEvent="false"
+      ref="reference">
+      <i slot="prefix"
+        class="el-input__icon"
+        :class="triggerClass"
+        @click="handleFocus">
+      </i>
+      <i slot="suffix"
+        class="el-input__icon"
+        @click="handleClickIcon"
+        :class="[showClose ? '' + clearIcon : '']"
+        v-if="haveTrigger">
+      </i>
+    </el-input>
+    <div
+      class="el-date-editor el-range-editor el-input__inner"
+      :class="[
+        'el-date-editor--' + type,
+        pickerSize ? `el-range-editor--${ pickerSize }` : '',
+        pickerDisabled ? 'is-disabled' : '',
+        pickerVisible ? 'is-active' : ''
+      ]"
+      @click="handleRangeClick"
+      @mouseenter="handleMouseEnter"
+      @mouseleave="showClose = false"
+      @keydown="handleKeydown"
+      ref="reference"
+      v-clickoutside="handleClose"
+      v-else>
+      <i :class="['el-input__icon', 'el-range__icon', triggerClass]"></i>
+      <input
+        autocomplete="off"
+        :placeholder="startPlaceholder"
+        :value="displayValue && displayValue[0]"
+        :disabled="pickerDisabled"
+        v-bind="firstInputId"
+        :readonly="!editable || readonly"
+        :name="name && name[0]"
+        @input="handleStartInput"
+        @change="handleStartChange"
+        @focus="handleFocus"
+        class="el-range-input">
+      <slot name="range-separator">
+        <span class="el-range-separator">{{ rangeSeparator }}</span>
+      </slot>
+      <input
+        autocomplete="off"
+        :placeholder="endPlaceholder"
+        :value="displayValue && displayValue[1]"
+        :disabled="pickerDisabled"
+        v-bind="secondInputId"
+        :readonly="!editable || readonly"
+        :name="name && name[1]"
+        @input="handleEndInput"
+        @change="handleEndChange"
+        @focus="handleFocus"
+        class="el-range-input">
+      <i
+        @click="handleClickIcon"
+        v-if="haveTrigger"
+        :class="{ [clearIcon]: showClose }"
+        class="el-input__icon el-range__close-icon">
+      </i>
+    </div>
+    <component :is="panel" slot="dropdown" v-bind="{
+      props: {
+        defaultValue,
+        defaultTime,
+        popperClass,
+        width: reference.getBoundingClientRect().width,
+        showTime: type === 'datetime' || type === 'datetimerange',
+        selectionMode,
+        unlinkPanels,
+        arrowControl: arrowControl || timeArrowControl || false,
+        format,
+        clearable,
+      },
+      on: {
+        dodestroy,
+        pick: onPick,
+        selectRange: onSelectRange,
+      }
+    }" />
+  </el-dropdown>
 </template>
 
 <script>
@@ -477,17 +498,15 @@ export default {
     },
 
     selectionMode() {
-      if (this.type === 'week') {
-        return 'week';
-      } else if (this.type === 'month') {
-        return 'month';
-      } else if (this.type === 'year') {
-        return 'year';
-      } else if (this.type === 'dates') {
-        return 'dates';
+      switch (this.type) {
+        case 'week':
+        case 'month':
+        case 'year':
+        case 'dates':
+          return this.type;
+        default:
+          return 'day';
       }
-
-      return 'day';
     },
 
     haveTrigger() {
@@ -812,23 +831,6 @@ export default {
     },
 
     mountPicker() {
-      this.picker = new Vue(this.panel).$mount();
-      this.picker.defaultValue = this.defaultValue;
-      this.picker.defaultTime = this.defaultTime;
-      this.picker.popperClass = this.popperClass;
-      this.popperElm = this.picker.$el;
-      this.picker.width = this.reference.getBoundingClientRect().width;
-      this.picker.showTime = this.type === 'datetime' || this.type === 'datetimerange';
-      this.picker.selectionMode = this.selectionMode;
-      this.picker.unlinkPanels = this.unlinkPanels;
-      this.picker.arrowControl = this.arrowControl || this.timeArrowControl || false;
-      this.$watch('format', (format) => {
-        this.picker.format = format;
-      });
-      this.$watch('clearable', (clearable) => {
-        this.picker.clearable = clearable;
-      }, { immediate: true });
-
       const updateOptions = () => {
         const options = this.pickerOptions;
 
@@ -887,6 +889,24 @@ export default {
           this.unwatchPickerOptions();
         }
         this.picker.$el.parentNode.removeChild(this.picker.$el);
+      }
+    },
+
+    onPick(date = '', visible = false) {
+      this.userInput = null;
+      this.pickerVisible = this.picker.visible = visible;
+      this.emitInput(date);
+      this.picker.resetView && this.picker.resetView();
+    },
+
+    onSelectRange(start, end, pos) {
+      if (this.refInput.length === 0) return;
+      if (!pos || pos === 'min') {
+        this.refInput[0].setSelectionRange(start, end);
+        this.refInput[0].focus();
+      } else if (pos === 'max') {
+        this.refInput[1].setSelectionRange(start, end);
+        this.refInput[1].focus();
       }
     },
 

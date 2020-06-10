@@ -3,15 +3,6 @@ import DatePanel from '../panel/date';
 import DateRangePanel from '../panel/date-range';
 import MonthRangePanel from '../panel/month-range';
 
-const getPanel = function(type) {
-  if (type === 'daterange' || type === 'datetimerange') {
-    return DateRangePanel;
-  } else if (type === 'monthrange') {
-    return MonthRangePanel;
-  }
-  return DatePanel;
-};
-
 export default {
   mixins: [Picker],
 
@@ -25,19 +16,15 @@ export default {
     timeArrowControl: Boolean
   },
 
-  watch: {
-    type(type) {
-      if (this.picker) {
-        this.unmountPicker();
-        this.panel = getPanel(type);
-        this.mountPicker();
-      } else {
-        this.panel = getPanel(type);
+  computed: {
+    panel() {
+      const type = this.type;
+      if (type === 'daterange' || type === 'datetimerange') {
+        return DateRangePanel;
+      } else if (type === 'monthrange') {
+        return MonthRangePanel;
       }
+      return DatePanel;
     }
-  },
-
-  created() {
-    this.panel = getPanel(this.type);
   }
 };

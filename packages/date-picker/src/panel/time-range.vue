@@ -72,7 +72,7 @@
   const minTimeOfDay = function(date) {
     return modifyDate(MIN_TIME, date.getFullYear(), date.getMonth(), date.getDate());
   };
-  
+
   const maxTimeOfDay = function(date) {
     return modifyDate(MAX_TIME, date.getFullYear(), date.getMonth(), date.getDate());
   };
@@ -86,6 +86,20 @@
     mixins: [Locale],
 
     components: { TimeSpinner },
+
+    props: {
+      defaultValue: {},
+      popperClass: String,
+      width: String,
+      arrowControl: Boolean,
+      format: String,
+      value: Array,
+      selectableRange: {
+        type: Array,
+        default: () => []
+      },
+      disabled: Boolean
+    },
 
     computed: {
       showSeconds() {
@@ -112,16 +126,12 @@
 
     data() {
       return {
-        popperClass: '',
         minDate: new Date(),
         maxDate: new Date(),
-        value: [],
         oldValue: [new Date(), new Date()],
-        defaultValue: null,
         format: 'HH:mm:ss',
         visible: false,
-        selectionRange: [0, 2],
-        arrowControl: false
+        selectionRange: [0, 2]
       };
     },
 

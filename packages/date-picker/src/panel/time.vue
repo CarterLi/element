@@ -44,7 +44,21 @@
 
     props: {
       visible: Boolean,
-      timeArrowControl: Boolean
+      timeArrowControl: Boolean,
+      defaultValue: {},
+      popperClass: String,
+      width: String,
+      arrowControl: Boolean,
+      format: {
+        default: 'HH:mm:ss',
+        type: String
+      },
+      value: String,
+      selectableRange: {
+        type: Array,
+        default: () => []
+      },
+      disabled: Boolean
     },
 
     watch: {
@@ -85,15 +99,9 @@
 
     data() {
       return {
-        popperClass: '',
-        format: 'HH:mm:ss',
-        value: '',
-        defaultValue: null,
         date: new Date(),
         oldValue: new Date(),
-        selectableRange: [],
         selectionRange: [0, 2],
-        disabled: false,
         arrowControl: false,
         needInitAdjust: true
       };

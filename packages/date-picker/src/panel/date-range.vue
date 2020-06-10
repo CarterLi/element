@@ -226,6 +226,22 @@
 
     directives: { Clickoutside },
 
+    props: {
+      defaultValue: {},
+      defaultTime: {},
+      popperClass: String,
+      showTime: Boolean,
+      unlinkPanels: Boolean,
+      arrowControl: Boolean,
+      format: {
+        type: String,
+        default: ''
+      },
+      clearable: Boolean,
+      value: Array,
+      disabled: Boolean
+    },
+
     computed: {
       btnDisabled() {
         return !(this.minDate && this.maxDate && !this.selecting && this.isValidValue([this.minDate, this.maxDate]));
@@ -316,10 +332,6 @@
 
     data() {
       return {
-        popperClass: '',
-        value: [],
-        defaultValue: null,
-        defaultTime: null,
         minDate: '',
         maxDate: '',
         leftDate: new Date(),
@@ -330,17 +342,13 @@
           row: null,
           column: null
         },
-        showTime: false,
         shortcuts: '',
-        visible: '',
+        visible: false,
         disabledDate: '',
         cellClassName: '',
         firstDayOfWeek: 7,
         minTimePickerVisible: false,
         maxTimePickerVisible: false,
-        format: '',
-        arrowControl: false,
-        unlinkPanels: false,
         dateUserInput: {
           min: null,
           max: null

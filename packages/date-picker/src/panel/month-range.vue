@@ -105,6 +105,19 @@
 
     directives: { Clickoutside },
 
+    props: {
+      defaultValue: {},
+      defaultTime: {},
+      popperClass: String,
+      width: String,
+      unlinkPanels: Boolean,
+      arrowControl: Boolean,
+      format: String,
+      clearable: Boolean,
+      value: Array,
+      disabled: Boolean
+    },
+
     computed: {
       btnDisabled() {
         return !(this.minDate && this.maxDate && !this.selecting && this.isValidValue([this.minDate, this.maxDate]));
@@ -133,10 +146,6 @@
 
     data() {
       return {
-        popperClass: '',
-        value: [],
-        defaultValue: null,
-        defaultTime: null,
         minDate: '',
         maxDate: '',
         leftDate: new Date(),
@@ -149,10 +158,7 @@
         },
         shortcuts: '',
         visible: '',
-        disabledDate: '',
-        format: '',
-        arrowControl: false,
-        unlinkPanels: false
+        disabledDate: ''
       };
     },
 
